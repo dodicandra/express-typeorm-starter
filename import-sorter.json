@@ -1,0 +1,19 @@
+{
+  "exclude": ["node_modules", "ios", "android", "config", "dummy", "scripts"],
+  "keepUnused": [".*"],
+  "wrappingStyle": "prettier",
+  "emptyLinesBetweenGroups": 1,
+  "groupRules": [
+    "^react((-dom)?(?!native))$",
+    "^react-native(/.*)?$",
+    "^react-(?!native|dom).*(-)?",
+    "^@react-navigation/.*|^(@)?react-native-?.*|(.*)/react-native",
+    "^@angular/",
+    "^vue$",
+    {},
+    "^[@]",
+    "^[#]",
+    "^[.]"
+  ],
+  "formatExports": false
+}
