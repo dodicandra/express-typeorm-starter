@@ -1,4 +1,5 @@
 import {Request, Response} from 'express';
+import {Equal} from 'typeorm';
 
 import {AppDataSource} from '../data-source';
 import {User} from '../entity/User';
@@ -51,5 +52,19 @@ export class UserController {
     await this.repository.remove(userToRemove);
 
     return response.json({message: 'user has been removed'});
+  }
+
+  async login(request: Request<any, any, {name: string; password: string}>, response: Response) {
+    const data = request.body;
+    const user = await this.repository.findOne({
+      where: {name: Equal(data.name), password: Equal(data.password)},
+    });
+
+    if (!user) {
+      return response.status(400).json({message: 'user not registered'});
+    }
+
+    response.cookie('user_admin_token', `${user.name}:${user.password}:${user.role}`);
+    return response.json({message: 'loggedin success'});
   }
 }

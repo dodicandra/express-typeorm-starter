@@ -1,5 +1,5 @@
 import {Exclude} from 'class-transformer';
-import {CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
+import {CreateDateColumn, Index, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 namespace DefaultEntity {
@@ -13,6 +13,7 @@ namespace DefaultEntity {
 abstract class DefaultEntity {
   @Exclude()
   @PrimaryGeneratedColumn()
+  @Index()
   id?: number;
 
   @CreateDateColumn()

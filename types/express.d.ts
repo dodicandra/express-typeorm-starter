@@ -5,6 +5,7 @@ declare module 'express' {
     cookies: {
       user_name: string;
       user_id: string;
+      user_admin_token: string;
     };
   }
 }

@@ -17,4 +17,4 @@ class User extends DefaultEntity {
   @Column()
   role!: UserInterface.Role;
 }
-export {User};
+export {User, UserInterface};

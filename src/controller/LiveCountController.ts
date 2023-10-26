@@ -4,6 +4,7 @@ import {Equal} from 'typeorm';
 import {AppDataSource} from '../data-source';
 import {Photo} from '../entity';
 import {LiveCount} from '../entity/LiveCount';
+import {CalegController} from './CalegController';
 import {UserWitnessController} from './WitnessController';
 
 interface LiveCountSave {
@@ -16,7 +17,7 @@ export class LiveCountController {
   private repository = AppDataSource.getRepository(LiveCount);
 
   async all(request: Request, response: Response) {
-    const data = await this.repository.find({relations: {userWitness: true, userWitnessPhoto: true}});
+    const data = await this.repository.find({relations: {userWitness: true, userWitnessPhoto: true, caleg: true}});
     return response.json(data);
   }
 
@@ -45,12 +46,6 @@ export class LiveCountController {
 
     const userWitness = await UserWitnessController.repository.findOne({where: {name: loggedUser.user_name}});
 
-    const lastInsert = await this.repository.count({where: {name: caleg, userWitness: {name: userWitness.name}}});
-
-    if (lastInsert > 0) {
-      return response.status(500).json({message: 'you already votes'});
-    }
-
     const p1 = new Photo();
     p1.path = photo[0];
     await AppDataSource.manager.save(p1);
@@ -58,15 +53,25 @@ export class LiveCountController {
     p2.path = photo[1];
     await AppDataSource.manager.save(p2);
 
+    const calegs = await CalegController.repository.findOne({where: {name: Equal(caleg)}});
+
+    if (!calegs) {
+      return response.status(500).json({message: 'caleg not found'});
+    }
+
     const votes = new LiveCount();
-    votes.name = caleg;
     votes.count = count;
     votes.userWitness = userWitness;
     votes.userWitnessPhoto = [p1, p2];
+    votes.caleg = calegs;
 
-    const res = await this.repository.save(votes);
+    try {
+      const res = await this.repository.save(votes);
 
-    return response.json({message: 'user saved', data: res});
+      return response.json({message: 'user saved', data: res});
+    } catch (error) {
+      return response.status(500).json({message: error.message});
+    }
   }
 
   async remove(request: Request, response: Response) {
@@ -86,7 +91,7 @@ export class LiveCountController {
   async getCalegCount(request: Request<{name: string}>, response: Response) {
     const param = request.params;
     const countData = await this.repository.find({
-      where: {name: Equal(param.name)},
+      where: {caleg: {name: Equal(param.name)}},
       relations: {userWitness: true, userWitnessPhoto: true},
     });
 

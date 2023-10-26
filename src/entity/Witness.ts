@@ -1,4 +1,4 @@
-import {Column, Entity, OneToMany} from 'typeorm';
+import {Column, Entity, OneToOne} from 'typeorm';
 
 import {DefaultEntity} from './Entity';
 import {LiveCount} from './LiveCount';
@@ -8,7 +8,7 @@ class UserWitness extends DefaultEntity {
   @Column()
   name!: string;
 
-  @OneToMany(() => LiveCount, (u) => u.userWitness)
+  @OneToOne(() => LiveCount, (u) => u.userWitness, {cascade: true, eager: true})
   votes?: LiveCount[];
 }
 

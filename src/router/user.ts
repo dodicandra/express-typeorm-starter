@@ -1,4 +1,5 @@
 import {UserController} from '../controller/UserController';
+import {authMiddlewareUserAdmin} from '../middleware/auth';
 import {createRoutes} from '../utils/createRoute';
 
 export const userRoute = createRoutes([
@@ -19,11 +20,19 @@ export const userRoute = createRoutes([
     method: 'post',
     route: '/users',
     action: 'save',
+    middleWare: [authMiddlewareUserAdmin],
+  },
+  {
+    controller: UserController,
+    method: 'post',
+    route: '/user/login',
+    action: 'login',
   },
   {
     controller: UserController,
     method: 'delete',
     route: '/users/:id',
     action: 'remove',
+    middleWare: [authMiddlewareUserAdmin],
   },
 ]);
