@@ -43,8 +43,9 @@ export class LiveCountController {
   }
 
   async save(request: Request<any, any, LiveCountSave>, response: Response) {
-    const {caleg, photo, count} = request.body;
+    const {caleg, count} = request.body;
     const loggedUser = request.cookies;
+    const files = request?.files as Express.Multer.File[];
 
     const userWitness = await UserWitnessController.repository.findOne({where: {name: loggedUser.user_name}});
 
@@ -53,13 +54,11 @@ export class LiveCountController {
     }
 
     const p1 = new Photo();
-    p1.path = photo[0];
+    p1.path = files[0].filename;
     p1.userWitenss = userWitness;
-    await AppDataSource.manager.save(p1);
     const p2 = new Photo();
-    p2.path = photo[1];
+    p2.path = files[1].filename;
     p2.userWitenss = userWitness;
-    await AppDataSource.manager.save(p2);
 
     const calegs = await CalegController.repository.findOne({where: {name: Equal(caleg)}});
 
@@ -74,6 +73,8 @@ export class LiveCountController {
     votes.caleg = calegs;
 
     try {
+      await AppDataSource.manager.save(p1);
+      await AppDataSource.manager.save(p2);
       const res = await this.repository.save(votes);
 
       return response.json({message: 'user saved', data: res});

@@ -1,5 +1,6 @@
 import {LiveCountController} from '../controller/LiveCountController';
 import {authMiddlewareUserWitness} from '../middleware/auth';
+import {upload} from '../storage/multer';
 import {createRoutes} from '../utils/createRoute';
 
 export const LiveCountRoute = createRoutes([
@@ -20,7 +21,7 @@ export const LiveCountRoute = createRoutes([
     method: 'post',
     route: '/live',
     action: 'save',
-    middleWare: [authMiddlewareUserWitness],
+    middleWare: [authMiddlewareUserWitness, upload.array('images', 2)],
   },
   {
     controller: LiveCountController,

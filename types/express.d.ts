@@ -7,5 +7,6 @@ declare module 'express' {
       user_id?: string;
       user_admin_token?: string;
     };
+    // files: Express.Multer.File[];
   }
 }

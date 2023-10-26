@@ -9,6 +9,7 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "forceConsistentCasingInFileNames": false,
-    "strict": true
+    "strict": true,
+    "esModuleInterop": true
   }
 }

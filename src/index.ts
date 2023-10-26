@@ -1,6 +1,6 @@
 import * as bodyParser from 'body-parser';
-import * as cookieParser from 'cookie-parser';
-import * as express from 'express';
+import cookieParser from 'cookie-parser';
+import express from 'express';
 
 import {AppDataSource} from './data-source';
 import {Routes} from './routes';
@@ -12,6 +12,7 @@ AppDataSource.initialize()
 
     app.use(cookieParser());
     app.use(bodyParser.json());
+    app.use(express.static('uploads'));
 
     // register express routes from defined application routes
     Routes.forEach((route) => {

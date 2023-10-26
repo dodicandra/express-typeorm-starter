@@ -5,6 +5,7 @@ import {Photo} from '../entity/Photo';
 
 export class PhotoController {
   private repository = AppDataSource.getRepository(Photo);
+  static repository = AppDataSource.getRepository(Photo);
 
   async all(request: Request, response: Response) {
     const data = await this.repository.find();
