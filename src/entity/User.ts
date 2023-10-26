@@ -1,16 +1,20 @@
-import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity} from 'typeorm';
 
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+import {DefaultEntity} from './Entity';
 
-  @Column()
-  firstName: string;
-
-  @Column()
-  lastName: string;
-
-  @Column()
-  age: number;
+namespace UserInterface {
+  export type Role = 'admin' | 'super_admin';
 }
+
+@Entity({name: 'user_admin'})
+class User extends DefaultEntity {
+  @Column()
+  name!: string;
+
+  @Column()
+  password!: string;
+
+  @Column()
+  role!: UserInterface.Role;
+}
+export {User};

@@ -1,10 +1,12 @@
 import {Request, Response} from 'express';
 
 import {AppDataSource} from '../data-source';
-import {User} from '../entity/User';
+import {UserWitness} from '../entity/Witness';
 
-export class UserController {
-  private repository = AppDataSource.getRepository(User);
+export class UserWitnessController {
+  private repository = AppDataSource.getRepository(UserWitness);
+
+  static repository = AppDataSource.getRepository(UserWitness);
 
   async all(request: Request, response: Response) {
     const data = await this.repository.find();
@@ -29,14 +31,17 @@ export class UserController {
     }
   }
 
-  async save(request: Request<any, any, User>, response: Response) {
-    const {name, password, role} = request.body;
+  async save(request: Request<any, any, {name: string}>, response: Response) {
+    const body = request.body;
+    try {
+      const user = Object.assign<UserWitness, UserWitness>(new UserWitness(), {name: body.name});
 
-    const user = Object.assign<User, User>(new User(), {name, password, role});
+      const res = await this.repository.save(user);
 
-    const res = await this.repository.save(user);
-
-    return response.json({message: 'user saved', data: res});
+      return response.json({message: 'user saved', data: res});
+    } catch (error) {
+      return response.status(500).json({message: error.message});
+    }
   }
 
   async remove(request: Request, response: Response) {
@@ -51,5 +56,20 @@ export class UserController {
     await this.repository.remove(userToRemove);
 
     return response.json({message: 'user has been removed'});
+  }
+
+  async login(request: Request<any, any, {name: string}>, response: Response) {
+    const data = request.body;
+    const user = await this.repository.findOne({
+      where: {name: data.name},
+    });
+
+    if (!user) {
+      return response.status(400).json({message: 'user not registered'});
+    }
+
+    response.cookie('user_name', user.name);
+    response.cookie('user_id', user.id);
+    return response.json({message: 'loggedin success'});
   }
 }

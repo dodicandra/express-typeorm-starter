@@ -8,16 +8,17 @@ type ObjectType<T> = {
 };
 
 interface RouterParams<T> {
-  method: 'get' | 'post' | 'delete' | 'update';
+  method: 'get' | 'post' | 'delete' | 'put';
   route: string;
   controller: ObjectType<T>;
   action: keyof T;
+  middleWare?: express.RequestHandler[];
 }
 
 export function createRoutes<T extends Record<string, any>>(params: RouterParams<T>[]) {
   const routes = express.Router();
   params.forEach((route) => {
-    routes[route.method](route.route, (req: Request<unknown>, res: Response<unknown>, next: NextFunction) => {
+    const nextFunc = (req: Request<unknown>, res: Response<unknown>, next: NextFunction) => {
       const result = new route.controller()[route.action](req, res, next);
       if (isPromiseResponse(result)) {
         result.then((result) =>
@@ -28,7 +29,9 @@ export function createRoutes<T extends Record<string, any>>(params: RouterParams
       } else {
         res.status(500).json({message: 'controller not same'});
       }
-    });
+    };
+    const params = route.middleWare ? [...route.middleWare, nextFunc] : [nextFunc];
+    routes[route.method](route.route, ...params);
   });
   return routes;
 }

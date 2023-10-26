@@ -1,10 +1,10 @@
 import {Request, Response} from 'express';
 
 import {AppDataSource} from '../data-source';
-import {User} from '../entity/User';
+import {UserVote} from '../entity/UserVote';
 
-export class UserController {
-  private repository = AppDataSource.getRepository(User);
+export class UserVoteController {
+  private repository = AppDataSource.getRepository(UserVote);
 
   async all(request: Request, response: Response) {
     const data = await this.repository.find();
@@ -29,10 +29,10 @@ export class UserController {
     }
   }
 
-  async save(request: Request<any, any, User>, response: Response) {
-    const {name, password, role} = request.body;
+  async save(request: Request<any, any, UserVote>, response: Response) {
+    const body = request.body;
 
-    const user = Object.assign<User, User>(new User(), {name, password, role});
+    const user = Object.assign<UserVote, UserVote>(new UserVote(), body);
 
     const res = await this.repository.save(user);
 

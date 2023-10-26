@@ -1,3 +1,3 @@
-import {userRoute} from './router/user';
+import {LiveCountRoute, PhotoRoute, userRoute, UserVoteRoute, UserWitnessRoute} from './router';
 
-export const Routes = [userRoute];
+export const Routes = [userRoute, LiveCountRoute, PhotoRoute, UserVoteRoute, UserWitnessRoute];

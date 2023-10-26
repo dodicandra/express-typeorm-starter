@@ -1,4 +1,5 @@
 import * as bodyParser from 'body-parser';
+import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 
 import {AppDataSource} from './data-source';
@@ -8,6 +9,8 @@ AppDataSource.initialize()
   .then(async () => {
     // create express app
     const app = express();
+
+    app.use(cookieParser());
     app.use(bodyParser.json());
 
     // register express routes from defined application routes

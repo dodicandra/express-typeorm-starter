@@ -11,12 +11,6 @@ export const userRoute = createRoutes([
   {
     controller: UserController,
     method: 'get',
-    route: '/users/test',
-    action: 'test',
-  },
-  {
-    controller: UserController,
-    method: 'get',
     route: '/users/:id',
     action: 'one',
   },

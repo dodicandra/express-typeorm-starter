@@ -1,10 +1,10 @@
 import {Request, Response} from 'express';
 
 import {AppDataSource} from '../data-source';
-import {User} from '../entity/User';
+import {Photo} from '../entity/Photo';
 
-export class UserController {
-  private repository = AppDataSource.getRepository(User);
+export class PhotoController {
+  private repository = AppDataSource.getRepository(Photo);
 
   async all(request: Request, response: Response) {
     const data = await this.repository.find();
@@ -29,10 +29,10 @@ export class UserController {
     }
   }
 
-  async save(request: Request<any, any, User>, response: Response) {
-    const {name, password, role} = request.body;
+  async save(request: Request<any, any, Photo>, response: Response) {
+    const {path} = request.body;
 
-    const user = Object.assign<User, User>(new User(), {name, password, role});
+    const user = Object.assign<Photo, Photo>(new Photo(), {path});
 
     const res = await this.repository.save(user);
 
@@ -51,5 +51,9 @@ export class UserController {
     await this.repository.remove(userToRemove);
 
     return response.json({message: 'user has been removed'});
+  }
+
+  async test() {
+    return 'ok';
   }
 }
