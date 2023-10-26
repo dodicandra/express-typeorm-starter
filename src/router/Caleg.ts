@@ -1,4 +1,5 @@
 import {CalegController} from '../controller/CalegController';
+import {authMiddlewareUserAdmin} from '../middleware/auth';
 import {createRoutes} from '../utils/createRoute';
 
 export const calegRoute = createRoutes([
@@ -7,5 +8,13 @@ export const calegRoute = createRoutes([
     action: 'save',
     method: 'post',
     route: '/caleg',
+    middleWare: [authMiddlewareUserAdmin],
+  },
+  {
+    controller: CalegController,
+    action: 'all',
+    method: 'get',
+    route: '/caleg',
+    middleWare: [authMiddlewareUserAdmin],
   },
 ]);

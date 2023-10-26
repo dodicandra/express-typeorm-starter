@@ -26,7 +26,7 @@ export class UserController {
       }
       return response.json(user);
     } catch (error) {
-      return response.status(500).json({message: error.message});
+      return response.status(500).json({message: (error as any).message});
     }
   }
 

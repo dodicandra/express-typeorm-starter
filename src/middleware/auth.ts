@@ -24,7 +24,7 @@ export async function authMiddlewareUserAdmin(req: Request, res: Response, next:
   const userCookie = cookies;
 
   const userAdmin = AppDataSource.getRepository(User);
-  const token = userCookie.user_admin_token.split(':');
+  const token = userCookie.user_admin_token?.split(':') ?? '';
   const name = token[0];
   const password = token[1];
   // const role = token[2] as UserInterface.Role;

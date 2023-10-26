@@ -11,14 +11,14 @@ class LiveCount extends DefaultEntity {
   count!: number;
 
   @OneToMany(() => Photo, (u) => u.votes)
-  userWitnessPhoto: Photo[];
+  userWitnessPhoto?: Photo[];
 
   @OneToOne(() => UserWitness, (u) => u.votes)
   @JoinColumn()
-  userWitness: UserWitness;
+  userWitness?: UserWitness;
 
   @ManyToOne(() => Caleg)
-  caleg: Caleg;
+  caleg?: Caleg;
 }
 
 export {LiveCount};

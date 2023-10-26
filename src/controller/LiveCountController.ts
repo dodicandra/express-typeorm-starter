@@ -17,7 +17,9 @@ export class LiveCountController {
   private repository = AppDataSource.getRepository(LiveCount);
 
   async all(request: Request, response: Response) {
-    const data = await this.repository.find({relations: {userWitness: true, userWitnessPhoto: true, caleg: true}});
+    const data = await this.repository.find({
+      relations: {userWitness: true, userWitnessPhoto: {userWitenss: true}, caleg: true},
+    });
     return response.json(data);
   }
 
@@ -36,7 +38,7 @@ export class LiveCountController {
       }
       return response.json(user);
     } catch (error) {
-      return response.status(500).json({message: error.message});
+      return response.status(500).json({message: (error as any).message});
     }
   }
 
@@ -46,11 +48,17 @@ export class LiveCountController {
 
     const userWitness = await UserWitnessController.repository.findOne({where: {name: loggedUser.user_name}});
 
+    if (!userWitness) {
+      return response.status(500).json({message: 'user saksi tidak ada'});
+    }
+
     const p1 = new Photo();
     p1.path = photo[0];
+    p1.userWitenss = userWitness;
     await AppDataSource.manager.save(p1);
     const p2 = new Photo();
     p2.path = photo[1];
+    p2.userWitenss = userWitness;
     await AppDataSource.manager.save(p2);
 
     const calegs = await CalegController.repository.findOne({where: {name: Equal(caleg)}});
@@ -70,7 +78,7 @@ export class LiveCountController {
 
       return response.json({message: 'user saved', data: res});
     } catch (error) {
-      return response.status(500).json({message: error.message});
+      return response.status(500).json({message: (error as any).message});
     }
   }
 
@@ -92,7 +100,7 @@ export class LiveCountController {
     const param = request.params;
     const countData = await this.repository.find({
       where: {caleg: {name: Equal(param.name)}},
-      relations: {userWitness: true, userWitnessPhoto: true},
+      relations: {userWitness: true, userWitnessPhoto: {userWitenss: true}},
     });
 
     const count = countData.reduce((prev, curr) => {
