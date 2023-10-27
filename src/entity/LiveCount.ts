@@ -1,4 +1,4 @@
-import {Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne} from 'typeorm';
+import {Column, Entity, JoinColumn, ManyToOne, OneToMany, Unique} from 'typeorm';
 
 import {Caleg} from './Caleg';
 import {DefaultEntity} from './Entity';
@@ -6,6 +6,7 @@ import {Photo} from './Photo';
 import {UserWitness} from './Witness';
 
 @Entity({name: 'caleg_live_count'})
+@Unique(['userWitness', 'caleg'])
 class LiveCount extends DefaultEntity {
   @Column({name: 'caleg_count'})
   count!: number;
@@ -13,12 +14,16 @@ class LiveCount extends DefaultEntity {
   @OneToMany(() => Photo, (u) => u.votes)
   userWitnessPhoto?: Photo[];
 
-  @OneToOne(() => UserWitness, (u) => u.votes)
-  @JoinColumn()
+  @ManyToOne(() => UserWitness, (u) => u.vote)
+  @JoinColumn({referencedColumnName: 'email'})
   userWitness?: UserWitness;
 
-  @ManyToOne(() => Caleg)
+  @ManyToOne(() => Caleg, (c) => c.votes)
+  @JoinColumn()
   caleg?: Caleg;
+
+  @Column({nullable: true})
+  tps?: string;
 }
 
 export {LiveCount};

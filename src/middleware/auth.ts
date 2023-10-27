@@ -7,10 +7,13 @@ import {User, UserWitness} from '../entity';
 export async function authMiddlewareUserWitness(req: Request, res: Response, next: NextFunction) {
   const {cookies} = req;
   const userCookie = cookies;
+  if (!userCookie.user_witness_email || !userCookie.user_witness_id) {
+    return res.status(401).json({message: 'Unauthorize'});
+  }
 
   const userWitnessRepo = AppDataSource.getRepository(UserWitness);
 
-  const user = await userWitnessRepo.findOne({where: {name: userCookie.user_name, id: Number(userCookie.user_id)}});
+  const user = await userWitnessRepo.findOne({where: {email: Equal(userCookie.user_witness_email)}});
 
   if (user) {
     next();

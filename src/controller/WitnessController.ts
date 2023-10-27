@@ -31,13 +31,12 @@ export class UserWitnessController {
     }
   }
 
-  async save(request: Request<any, any, {name: string}>, response: Response) {
+  async save(request: Request<any, any, {name: string; email: string}>, response: Response) {
     const body = request.body;
     try {
-      const user = Object.assign<UserWitness, UserWitness>(new UserWitness(), {name: body.name});
+      const user = Object.assign<UserWitness, UserWitness>(new UserWitness(), body);
 
       const res = await this.repository.save(user);
-
       return response.json({message: 'user saved', data: res});
     } catch (error) {
       return response.status(500).json({message: (error as any).message});
@@ -58,18 +57,18 @@ export class UserWitnessController {
     return response.json({message: 'user has been removed'});
   }
 
-  async login(request: Request<any, any, {name: string}>, response: Response) {
+  async login(request: Request<any, any, {email: string}>, response: Response) {
     const data = request.body;
     const user = await this.repository.findOne({
-      where: {name: data.name},
+      where: {email: data.email},
     });
 
     if (!user) {
       return response.status(400).json({message: 'user not registered'});
     }
 
-    response.cookie('user_name', user.name);
-    response.cookie('user_id', user.id);
+    response.cookie('user_witness_email', user.email);
+    response.cookie('user_witness_id', user.id);
     return response.json({message: 'loggedin success'});
   }
 }

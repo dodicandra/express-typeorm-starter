@@ -10,7 +10,7 @@ import {UserWitnessController} from './WitnessController';
 interface LiveCountSave {
   caleg: string;
   count: number;
-  photo: string[];
+  tps: string;
 }
 
 export class LiveCountController {
@@ -43,11 +43,13 @@ export class LiveCountController {
   }
 
   async save(request: Request<any, any, LiveCountSave>, response: Response) {
-    const {caleg, count} = request.body;
+    const {caleg, count, tps} = request.body;
     const loggedUser = request.cookies;
     const files = request?.files as Express.Multer.File[];
 
-    const userWitness = await UserWitnessController.repository.findOne({where: {name: loggedUser.user_name}});
+    const userWitness = await UserWitnessController.repository.findOne({
+      where: {email: Equal(loggedUser.user_witness_email ?? '')},
+    });
 
     if (!userWitness) {
       return response.status(500).json({message: 'user saksi tidak ada'});
@@ -71,6 +73,7 @@ export class LiveCountController {
     votes.userWitness = userWitness;
     votes.userWitnessPhoto = [p1, p2];
     votes.caleg = calegs;
+    votes.tps = tps;
 
     try {
       await AppDataSource.manager.save(p1);
@@ -101,7 +104,7 @@ export class LiveCountController {
     const param = request.params;
     const countData = await this.repository.find({
       where: {caleg: {name: Equal(param.name)}},
-      relations: {userWitness: true, userWitnessPhoto: {userWitenss: true}},
+      relations: {userWitness: {vote: false}, userWitnessPhoto: {userWitenss: true}},
     });
 
     const count = countData.reduce((prev, curr) => {
