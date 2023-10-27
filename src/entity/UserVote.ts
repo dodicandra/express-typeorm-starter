@@ -1,10 +1,11 @@
-import {Column, Entity} from 'typeorm';
+import {Column, Entity, JoinColumn, ManyToOne} from 'typeorm';
 
 import {DefaultEntity} from './Entity';
+import {VoterSuperVisor} from './VoterSupervisor';
 
-@Entity({name: 'user_vote'})
+@Entity({name: 'user_voter'})
 class UserVote extends DefaultEntity {
-  @Column()
+  @Column({unique: true})
   uniq_id!: string;
 
   @Column()
@@ -24,6 +25,13 @@ class UserVote extends DefaultEntity {
 
   @Column()
   rw!: string;
+
+  @Column()
+  hp?: string;
+
+  @ManyToOne(() => VoterSuperVisor, (v) => v.voter)
+  @JoinColumn()
+  supervisor?: VoterSuperVisor;
 }
 
 export {UserVote};
