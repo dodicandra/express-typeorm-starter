@@ -2,6 +2,7 @@ import * as bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 
+import {PORT} from './config';
 import {AppDataSource} from './data-source';
 import {Routes} from './routes';
 
@@ -12,7 +13,7 @@ AppDataSource.initialize()
 
     app.use(cookieParser());
     app.use(bodyParser.json());
-    app.use(express.static('uploads'));
+    app.use('/uploads', express.static('uploads'));
 
     // register express routes from defined application routes
     Routes.forEach((route) => {
@@ -23,8 +24,8 @@ AppDataSource.initialize()
     // ...
 
     // start express server
-    app.listen(3000);
+    app.listen(PORT);
 
-    console.log('Express server has started on port 3000. Open http://localhost:3000/users to see results');
+    console.log(`Express server has started on port 3000. Open http://localhost:${PORT} to see results`);
   })
   .catch((error) => console.log(error));

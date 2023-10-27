@@ -1,5 +1,6 @@
-import {Column, Entity, ManyToOne} from 'typeorm';
+import {AfterLoad, Column, Entity, ManyToOne} from 'typeorm';
 
+import {host} from '../config';
 import {DefaultEntity} from './Entity';
 import {LiveCount} from './LiveCount';
 import {UserWitness} from './Witness';
@@ -14,6 +15,11 @@ class Photo extends DefaultEntity {
 
   @ManyToOne(() => UserWitness, (u) => u.photo)
   userWitenss?: UserWitness;
+
+  @AfterLoad()
+  updatePath?() {
+    this.path = `${host}/uploads/${this.path}`;
+  }
 }
 
 export {Photo};
