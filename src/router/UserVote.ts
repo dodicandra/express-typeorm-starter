@@ -1,4 +1,5 @@
 import {UserVoteController} from '../controller/UserVoteController';
+import {authMiddlewareUserAdmin} from '../middleware/auth';
 import {createRoutes} from '../utils/createRoute';
 
 export const UserVoteRoute = createRoutes([
@@ -19,11 +20,13 @@ export const UserVoteRoute = createRoutes([
     method: 'post',
     route: '/user-vote',
     action: 'save',
+    middleWare: [authMiddlewareUserAdmin],
   },
   {
     controller: UserVoteController,
     method: 'delete',
     route: '/user-vote/:id',
     action: 'remove',
+    middleWare: [authMiddlewareUserAdmin],
   },
 ]);

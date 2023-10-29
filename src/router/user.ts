@@ -20,7 +20,6 @@ export const userRoute = createRoutes([
     method: 'post',
     route: '/users',
     action: 'save',
-    middleWare: [authMiddlewareUserAdmin],
   },
   {
     controller: UserController,

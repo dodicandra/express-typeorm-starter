@@ -34,5 +34,6 @@ export const UserWitnessRoute = createRoutes([
     method: 'delete',
     route: '/users-witness/:id',
     action: 'remove',
+    middleWare: [authMiddlewareUserAdmin],
   },
 ]);

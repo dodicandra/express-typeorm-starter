@@ -6,8 +6,19 @@ import {UserVote} from '../entity/UserVote';
 export class UserVoteController {
   private repository = AppDataSource.getRepository(UserVote);
 
-  async all(request: Request, response: Response) {
-    const data = await this.repository.find();
+  async all(request: Request<any, any, any, UserVote>, response: Response) {
+    const query = request.query;
+    const where = query
+      ? Object.entries(query)
+          .map(([key, value]) => ({
+            [key]: `%${value}%`,
+          }))
+          .reduce((acc, curr) => {
+            return Object.assign(acc, curr);
+          }, {})
+      : {};
+    console.log(where);
+    const data = await this.repository.find({where});
     return response.json(data);
   }
 

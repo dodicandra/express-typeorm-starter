@@ -28,5 +28,6 @@ export const LiveCountRoute = createRoutes([
     method: 'delete',
     route: '/live',
     action: 'remove',
+    middleWare: [authMiddlewareUserWitness],
   },
 ]);
