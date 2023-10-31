@@ -21,7 +21,7 @@ export const LiveCountRoute = createRoutes([
     method: 'post',
     route: '/live',
     action: 'save',
-    middleWare: [authMiddlewareUserWitness, upload.array('images', 2)],
+    middleWare: [authMiddlewareUserWitness, upload.array('images', 3)],
   },
   {
     controller: LiveCountController,
@@ -29,5 +29,12 @@ export const LiveCountRoute = createRoutes([
     route: '/live',
     action: 'remove',
     middleWare: [authMiddlewareUserWitness],
+  },
+  {
+    controller: LiveCountController,
+    method: 'put',
+    route: '/live/:id',
+    action: 'edit',
+    middleWare: [authMiddlewareUserWitness, upload.array('images', 2)],
   },
 ]);

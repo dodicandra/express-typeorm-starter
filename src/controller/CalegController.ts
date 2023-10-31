@@ -21,4 +21,12 @@ export class CalegController {
 
     return response.json({message: 'caleg saved', data: res});
   }
+
+  async update(request: Request<{id: number}, any, Caleg>, response: Response) {
+    const body = request.body;
+
+    const user = await this.repository.update({id: request.params.id}, body);
+
+    return response.json({message: 'updated saved', data: user});
+  }
 }

@@ -5,12 +5,20 @@ import {AppDataSource} from '../data-source';
 import {Photo} from '../entity';
 import {LiveCount} from '../entity/LiveCount';
 import {CalegController} from './CalegController';
+import {PhotoController} from './PhotoController';
 import {UserWitnessController} from './WitnessController';
 
 interface LiveCountSave {
   caleg: string;
   count: number;
   tps: string;
+}
+
+interface LiveCountEdit {
+  id: number;
+  calegId: number;
+  count: number;
+  witnessEmail: number;
 }
 
 export class LiveCountController {
@@ -84,6 +92,38 @@ export class LiveCountController {
     } catch (error) {
       return response.status(500).json({message: (error as any).message});
     }
+  }
+
+  async edit(request: Request<{id: string}, any, LiveCountEdit>, response: Response) {
+    const id = Number(request.params.id);
+    const body = request.body;
+    const images = request.files as Express.Multer.File[];
+    const data = await this.repository.findOne({where: {id}, relations: {userWitnessPhoto: true}});
+
+    if (!data) {
+      return response.status(500).json({message: 'data not found'});
+    }
+
+    data.count = body.count;
+
+    if (data.userWitnessPhoto) {
+      data.userWitnessPhoto.map((it, index) => {
+        if (images.length) it.path = images[index].filename;
+      });
+    }
+
+    await this.repository.save(data);
+
+    if (data.userWitnessPhoto) {
+      await Promise.all(data.userWitnessPhoto.map((it) => PhotoController.repository.save(it)));
+    }
+
+    const dataUpdated = await this.repository.findOne({
+      where: {id: data.id},
+      relations: {caleg: true, userWitnessPhoto: true},
+    });
+
+    return response.json({data: dataUpdated});
   }
 
   async remove(request: Request, response: Response) {

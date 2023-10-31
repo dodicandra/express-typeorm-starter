@@ -17,4 +17,11 @@ export const calegRoute = createRoutes([
     route: '/caleg',
     middleWare: [authMiddlewareUserAdmin],
   },
+  {
+    controller: CalegController,
+    action: 'update',
+    method: 'put',
+    route: '/caleg/:id',
+    middleWare: [authMiddlewareUserAdmin],
+  },
 ]);

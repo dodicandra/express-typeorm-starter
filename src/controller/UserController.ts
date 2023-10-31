@@ -65,6 +65,6 @@ export class UserController {
     }
 
     response.cookie('user_admin_token', `${user.name}:${user.password}:${user.role}`);
-    return response.json({message: 'loggedin success'});
+    return response.json({message: 'loggedin success', d: user.createdAt});
   }
 }

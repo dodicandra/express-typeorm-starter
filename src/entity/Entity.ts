@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import {Exclude} from 'class-transformer';
 import {CreateDateColumn, Index, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
 
@@ -9,7 +10,6 @@ namespace DefaultEntity {
 
   export type EntityParam<T> = Omit<T, OmitFunc<T>>;
 }
-
 abstract class DefaultEntity {
   @Exclude()
   @PrimaryGeneratedColumn()

@@ -1,8 +1,11 @@
 import {NextFunction, Request, Response} from 'express';
+import jwt from 'jsonwebtoken';
 import {Equal} from 'typeorm';
 
 import {AppDataSource} from '../data-source';
 import {User, UserWitness} from '../entity';
+
+export const jwtSecret = 'aksndfhasdbfaeyJBHASDBWYDFbAKJS88asd67wbh';
 
 export async function authMiddlewareUserWitness(req: Request, res: Response, next: NextFunction) {
   const {cookies} = req;
@@ -38,5 +41,18 @@ export async function authMiddlewareUserAdmin(req: Request, res: Response, next:
     next();
   } else {
     res.status(401).json({message: 'Unauthorize'});
+  }
+}
+
+export function authJWT(req: Request, res: Response, next: Function) {
+  if (!req.headers.authorization) return res.status(401).json({message: 'not authorization'});
+  const authHeader = req.headers.authorization.split(' ')[1];
+  try {
+    const credentials = jwt.verify(authHeader, jwtSecret);
+    if (typeof credentials !== 'string' && 'iss' in credentials) {
+      next();
+    }
+  } catch (err) {
+    return res.status(401).json({message: 'Kamu tidak punya akses'});
   }
 }
