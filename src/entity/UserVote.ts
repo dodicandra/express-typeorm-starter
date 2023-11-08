@@ -5,7 +5,7 @@ import {VoterSuperVisor} from './VoterSupervisor';
 
 @Entity({name: 'user_voter'})
 class UserVote extends DefaultEntity {
-  @Column({unique: true})
+  @Column()
   uniq_id!: string;
 
   @Column()
@@ -26,7 +26,7 @@ class UserVote extends DefaultEntity {
   @Column()
   rw!: string;
 
-  @Column()
+  @Column({nullable: true})
   hp?: string;
 
   @ManyToOne(() => VoterSuperVisor, (v) => v.voter)

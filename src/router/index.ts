@@ -5,3 +5,5 @@ export * from './UserVote';
 export * from './Witness';
 export * from './Caleg';
 export * from './Area';
+export * from './UserVoteMasterData';
+export * from './VoterSupervisor';

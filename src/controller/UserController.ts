@@ -64,7 +64,12 @@ export class UserController {
       return response.status(400).json({message: 'user not registered'});
     }
 
-    response.cookie('user_admin_token', `${user.name}:${user.password}:${user.role}`);
-    return response.json({message: 'loggedin success', d: user.createdAt});
+    return response
+      .cookie('user_admin_token', `${user.name}:${user.password}:${user.role}`, {
+        maxAge: 1000 * 60 * 60 * 24 * 14, // 14 Day Age,
+        domain: 'localhost',
+        sameSite: 'lax',
+      })
+      .json({message: 'loggedin success', token: `${user.name}:${user.password}:${user.role}`});
   }
 }

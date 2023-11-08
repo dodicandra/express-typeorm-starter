@@ -8,6 +8,7 @@ export const voterSupervisorVoteRoute = createRoutes([
     method: 'get',
     route: '/supervisor',
     action: 'all',
+    middleWare: [authMiddlewareUserAdmin],
   },
   {
     controller: VoterSupervisorController,
@@ -15,5 +16,11 @@ export const voterSupervisorVoteRoute = createRoutes([
     route: '/supervisor',
     action: 'save',
     middleWare: [authMiddlewareUserAdmin],
+  },
+  {
+    controller: VoterSupervisorController,
+    method: 'post',
+    route: '/supervisor/login',
+    action: 'login',
   },
 ]);

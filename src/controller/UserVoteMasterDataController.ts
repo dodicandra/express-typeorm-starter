@@ -1,27 +1,24 @@
 import {Request, Response} from 'express';
-import {Equal} from 'typeorm';
+import {Like} from 'typeorm';
 
 import {AppDataSource} from '../data-source';
-import {UserVote} from '../entity/UserVote';
-import {VoterSupervisorController} from './VoterSupervisor';
+import {UserVoteMasterData} from '../entity';
 
-export class UserVoteController {
-  private repository = AppDataSource.getRepository(UserVote);
+export class UserVoteMasterDataController {
+  private repository = AppDataSource.getRepository(UserVoteMasterData);
 
-  async all(request: Request<any, any, any, UserVote>, response: Response) {
-    const query = request.query;
-    const where = query
-      ? Object.entries(query)
-          .map(([key, value]) => ({
-            [key]: `%${value}%`,
-          }))
-          .reduce((acc, curr) => {
-            return Object.assign(acc, curr);
-          }, {})
-      : {};
-    console.log(where);
+  async all(request: Request<any, any, any, UserVoteMasterData>, response: Response) {
+    const queryWhere = Object.entries(request.query)
+      .map(([key, value]) => ({
+        [key]: Like(value),
+      }))
+      .reduce((acc, curr) => {
+        return Object.assign(acc, curr);
+      }, {});
+
+    const where = request.query ? queryWhere : {};
     const data = await this.repository.find({where});
-    return response.json(data);
+    return response.json({data});
   }
 
   async one(request: Request<{id: string}>, response: Response) {
@@ -42,28 +39,17 @@ export class UserVoteController {
     }
   }
 
-  async save(request: Request<any, any, UserVote>, response: Response) {
+  async save(request: Request<any, any, UserVoteMasterData>, response: Response) {
     const body = request.body;
-    const token = request.cookies.supervisor_token;
-    const spEmail = token?.split(':')[0] ?? '';
-    const spPass = token?.split(':')[1] ?? '';
 
-    const supervisor = await VoterSupervisorController.repository.findOne({
-      where: {email: Equal(spEmail), password: Equal(spPass)},
-    });
-
-    if (!supervisor) {
-      return response.status(500).json({message: 'supervisor tidak ada'});
-    }
-
-    const user = Object.assign<UserVote, UserVote>(new UserVote(), {...body, supervisor});
+    const user = Object.assign<UserVoteMasterData, UserVoteMasterData>(new UserVoteMasterData(), body);
 
     const res = await this.repository.save(user);
 
     return response.json({message: 'user saved', data: res});
   }
 
-  async bulksave(request: Request<any, any, UserVote[]>, response: Response) {
+  async bulksave(request: Request<any, any, UserVoteMasterData[]>, response: Response) {
     const body = request.body;
 
     const res = await this.repository.save(body);

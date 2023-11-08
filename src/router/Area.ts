@@ -10,6 +10,12 @@ export const areaRoute = createRoutes([
   },
   {
     controller: AreaController,
+    action: 'bulksaveKecamatan',
+    method: 'post',
+    route: '/kecamatan/bulk',
+  },
+  {
+    controller: AreaController,
     action: 'allKecamatan',
     method: 'get',
     route: '/kecamatan',
@@ -22,6 +28,12 @@ export const areaRoute = createRoutes([
   },
   {
     controller: AreaController,
+    action: 'bulksaveKelurahan',
+    method: 'post',
+    route: '/kelurahan/bulk',
+  },
+  {
+    controller: AreaController,
     action: 'allKelurahan',
     method: 'get',
     route: '/kelurahan',
@@ -31,6 +43,12 @@ export const areaRoute = createRoutes([
     action: 'saveTps',
     method: 'post',
     route: '/tps',
+  },
+  {
+    controller: AreaController,
+    action: 'bulksaveTps',
+    method: 'post',
+    route: '/tps/bulk',
   },
   {
     controller: AreaController,

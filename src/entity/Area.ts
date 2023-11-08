@@ -18,4 +18,7 @@ export class Kelurahan extends DefaultEntity {
 export class Tps extends DefaultEntity {
   @Column({name: 'nomor_tps'})
   number!: string;
+
+  @Column()
+  kelurahan!: string;
 }

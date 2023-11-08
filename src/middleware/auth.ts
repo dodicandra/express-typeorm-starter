@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import {Equal} from 'typeorm';
 
 import {AppDataSource} from '../data-source';
-import {User, UserWitness} from '../entity';
+import {User, UserWitness, VoterSuperVisor} from '../entity';
 
 export const jwtSecret = 'aksndfhasdbfaeyJBHASDBWYDFbAKJS88asd67wbh';
 
@@ -41,6 +41,24 @@ export async function authMiddlewareUserAdmin(req: Request, res: Response, next:
     next();
   } else {
     res.status(401).json({message: 'Unauthorize'});
+  }
+}
+export async function authMiddlewareSupervisor(req: Request, res: Response, next: NextFunction) {
+  const {cookies} = req;
+  const userCookie = cookies;
+
+  const userAdmin = AppDataSource.getRepository(VoterSuperVisor);
+  const token = userCookie.supervisor_token?.split(':') ?? '';
+
+  const email = token[0];
+  const password = token[1];
+
+  const user = await userAdmin.findOne({where: {email: Equal(email), password: Equal(password)}});
+
+  if (user) {
+    next();
+  } else {
+    res.status(401).json({message: 'SuperVisor Unauthorize'});
   }
 }
 
