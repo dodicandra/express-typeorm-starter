@@ -7,7 +7,11 @@ import {PORT} from './config';
 import {AppDataSource} from './data-source';
 import {Routes} from './routes';
 
-const whitelist = ['http://localhost:3001'];
+const whitelist = [
+  'http://localhost:3001',
+  'http://localhost:4000',
+  'https://suite-manitoba-dolls-gaming.trycloudflare.com',
+];
 
 const corsOptions = {
   origin: (origin: any, callback: any) => {

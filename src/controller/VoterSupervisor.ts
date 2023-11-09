@@ -1,4 +1,5 @@
 import {Request, Response} from 'express';
+import {Like} from 'typeorm';
 
 import {AppDataSource} from '../data-source';
 import {VoterSuperVisor} from '../entity';
@@ -13,8 +14,12 @@ export class VoterSupervisorController {
   private repository = AppDataSource.getRepository(VoterSuperVisor);
   static repository = AppDataSource.getRepository(VoterSuperVisor);
 
-  async all(request: Request, response: Response) {
-    const data = await this.repository.find({select: {email: true, id: true, name: true, voter: true}});
+  async all(request: Request<any, any, any, {name: string}>, response: Response) {
+    const data = await this.repository.find({
+      select: {email: true, id: true, name: true, voter: true},
+      relations: {voter: true},
+      where: request.query.name ? {name: Like(request.query.name)} : undefined,
+    });
     return response.json({data});
   }
 
@@ -38,7 +43,11 @@ export class VoterSupervisorController {
       return response.status(400).json({message: 'supervisor not registered'});
     }
 
-    response.cookie('supervisor_token', `${user.email}:${user.password}`, {httpOnly: true});
+    response.cookie('supervisor_token', `${user.email}:${user.password}`, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+    });
     return response.json({message: 'loggedin success', token: `${user.email}:${user.password}`});
   }
 }

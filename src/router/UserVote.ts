@@ -8,6 +8,7 @@ export const UserVoteRoute = createRoutes([
     method: 'get',
     route: '/user-vote',
     action: 'all',
+    middleWare: [authMiddlewareUserAdmin],
   },
   {
     controller: UserVoteController,

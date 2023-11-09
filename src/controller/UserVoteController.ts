@@ -21,7 +21,8 @@ export class UserVoteController {
       : {};
     console.log(where);
     const data = await this.repository.find({where});
-    return response.json(data);
+    const count = await this.repository.count({where});
+    return response.json({data, count});
   }
 
   async one(request: Request<{id: string}>, response: Response) {

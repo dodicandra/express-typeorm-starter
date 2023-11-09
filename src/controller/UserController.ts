@@ -66,9 +66,9 @@ export class UserController {
 
     return response
       .cookie('user_admin_token', `${user.name}:${user.password}:${user.role}`, {
-        maxAge: 1000 * 60 * 60 * 24 * 14, // 14 Day Age,
-        domain: 'localhost',
-        sameSite: 'lax',
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
       })
       .json({message: 'loggedin success', token: `${user.name}:${user.password}:${user.role}`});
   }

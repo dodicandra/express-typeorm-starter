@@ -67,8 +67,8 @@ export class UserWitnessController {
       return response.status(400).json({message: 'user not registered'});
     }
 
-    response.cookie('user_witness_email', user.email, {httpOnly: true});
-    response.cookie('user_witness_id', user.id, {httpOnly: true});
+    response.cookie('user_witness_email', user.email, {httpOnly: true, secure: true, sameSite: 'none'});
+    response.cookie('user_witness_id', user.id, {httpOnly: true, secure: true, sameSite: 'none'});
     return response.json({message: 'loggedin success'});
   }
 }
