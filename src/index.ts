@@ -1,16 +1,20 @@
 import * as bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import {config} from 'dotenv';
 import express from 'express';
 
 import {PORT} from './config';
 import {AppDataSource} from './data-source';
 import {Routes} from './routes';
 
+config();
+
 const whitelist = [
   'http://localhost:3001',
   'http://localhost:4000',
   'https://suite-manitoba-dolls-gaming.trycloudflare.com',
+  'https://dimensional-sao-philippines-commodity.trycloudflare.com',
 ];
 
 const corsOptions = {
@@ -49,6 +53,6 @@ AppDataSource.initialize()
     // start express server
     app.listen(PORT);
 
-    console.log(`Express server has started on port 3000. Open http://localhost:${PORT} to see results`);
+    console.log(`Express server has started on port ${PORT}. Open http://localhost:${PORT} to see results`);
   })
   .catch((error) => console.log(error));
