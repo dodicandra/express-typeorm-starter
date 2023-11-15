@@ -95,7 +95,7 @@ export class AreaController {
     return response.json({message: 'TPS saved', data: res});
   }
 
-  async bulksaveTps(request: Request<any, any, {number: string}>, response: Response) {
+  async bulksaveTps(request: Request<any, any, {number: string}[]>, response: Response) {
     const body = request.body;
 
     const res = await this.repository.tps.save(body);
