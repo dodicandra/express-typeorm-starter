@@ -3,7 +3,7 @@ declare global {
     interface ProcessEnv {
       HOST: string;
       ENV: 'development' | 'production';
-      PORT: number;
+      PORT: string;
     }
   }
 }
