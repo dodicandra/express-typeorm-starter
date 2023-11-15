@@ -10,7 +10,12 @@ import {Routes} from './routes';
 
 config();
 
-const whitelist = ['http://localhost:3001', 'http://localhost:4000', 'https://rikahanom.com'];
+const whitelist = [
+  'http://localhost:3001',
+  'http://localhost:4000',
+  'https://rikahanom.com',
+  'https://www.rikahanom.com',
+];
 
 const corsOptions = {
   origin: (origin: any, callback: any) => {
