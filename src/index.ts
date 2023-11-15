@@ -10,12 +10,7 @@ import {Routes} from './routes';
 
 config();
 
-const whitelist = [
-  'http://localhost:3001',
-  'http://localhost:4000',
-  'https://suite-manitoba-dolls-gaming.trycloudflare.com',
-  'https://dimensional-sao-philippines-commodity.trycloudflare.com',
-];
+const whitelist = ['http://localhost:3001', 'http://localhost:4000', 'https://rikahanom.com'];
 
 const corsOptions = {
   origin: (origin: any, callback: any) => {
