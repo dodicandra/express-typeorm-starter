@@ -10,6 +10,7 @@ export const jwtSecret = 'aksndfhasdbfaeyJBHASDBWYDFbAKJS88asd67wbh';
 export async function authMiddlewareUserWitness(req: Request, res: Response, next: NextFunction) {
   const {cookies} = req;
   const userCookie = cookies;
+  console.log({witness: userCookie});
   if (!userCookie.user_witness_email || !userCookie.user_witness_id) {
     return res.status(401).json({message: 'Unauthorize'});
   }
@@ -34,7 +35,7 @@ export async function authMiddlewareUserAdmin(req: Request, res: Response, next:
   const name = token[0];
   const password = token[1];
   // const role = token[2] as UserInterface.Role;
-
+  console.log({admin: userCookie});
   const user = await userAdmin.findOne({where: {name: Equal(name), password: Equal(password), role: 'super_admin'}});
 
   if (user) {
@@ -43,6 +44,7 @@ export async function authMiddlewareUserAdmin(req: Request, res: Response, next:
     res.status(401).json({message: 'Unauthorize'});
   }
 }
+
 export async function authMiddlewareSupervisor(req: Request, res: Response, next: NextFunction) {
   const {cookies} = req;
   const userCookie = cookies;
@@ -52,7 +54,7 @@ export async function authMiddlewareSupervisor(req: Request, res: Response, next
 
   const email = token[0];
   const password = token[1];
-
+  console.log({admin: userCookie});
   const user = await userAdmin.findOne({where: {email: Equal(email), password: Equal(password)}});
 
   if (user) {
