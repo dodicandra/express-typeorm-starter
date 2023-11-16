@@ -26,11 +26,14 @@ export class VoterSupervisorController {
   async save(request: Request<any, any, Payload>, response: Response) {
     const body = request.body;
 
-    const user = Object.assign<VoterSuperVisor, VoterSuperVisor>(new VoterSuperVisor(), body);
-
-    const res = await this.repository.save(user);
-
-    return response.json({message: 'supervisor saved', data: res});
+    try {
+      const user = Object.assign<VoterSuperVisor, VoterSuperVisor>(new VoterSuperVisor(), body);
+      const res = await this.repository.save(user);
+      return response.json({message: 'supervisor saved', data: res});
+    } catch (error) {
+      const err = error as {message?: string};
+      return response.status(500).json({message: err.message?.includes('UNIQUE') ? 'user telah ada' : err.message});
+    }
   }
 
   async login(request: Request<any, any, {email: string; password: string}>, response: Response) {
@@ -42,12 +45,24 @@ export class VoterSupervisorController {
     if (!user) {
       return response.status(400).json({message: 'supervisor not registered'});
     }
+    const token = `${user.email}:${user.password}:${user.name}`;
 
-    response.cookie('supervisor_token', `${user.email}:${user.password}`, {
+    response.cookie('supervisor_token', token, {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
     });
-    return response.json({message: 'loggedin success', token: `${user.email}:${user.password}`});
+    return response.json({message: 'loggedin success', token});
+  }
+
+  async getCandidate(request: Request<any, any, any>, response: Response) {
+    const user = request.cookies.supervisor_token;
+
+    const email = user?.split(':')[0] ?? '';
+
+    const data = await this.repository.findOne({where: {email}, relations: {voter: true}});
+    const count = data?.voter?.length ?? 0;
+
+    return response.json({count});
   }
 }

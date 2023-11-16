@@ -3,6 +3,7 @@ import {Equal} from 'typeorm';
 
 import {AppDataSource} from '../data-source';
 import {UserVote} from '../entity/UserVote';
+import {UserVoteMasterDataController} from './UserVoteMasterDataController';
 import {VoterSupervisorController} from './VoterSupervisor';
 
 export class UserVoteController {
@@ -58,7 +59,7 @@ export class UserVoteController {
     }
 
     const user = Object.assign<UserVote, UserVote>(new UserVote(), {...body, supervisor});
-
+    await UserVoteMasterDataController.repository.update({id: body.id}, {reservased: true});
     const res = await this.repository.save(user);
 
     return response.json({message: 'user saved', data: res});

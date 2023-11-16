@@ -1,9 +1,10 @@
-import {Column, Entity, JoinColumn, ManyToOne} from 'typeorm';
+import {Column, Entity, JoinColumn, ManyToOne, Unique} from 'typeorm';
 
 import {DefaultEntity} from './Entity';
 import {VoterSuperVisor} from './VoterSupervisor';
 
 @Entity({name: 'user_voter'})
+@Unique(['name', 'tps', 'kelurahan', 'rt', 'rw'])
 class UserVote extends DefaultEntity {
   @Column()
   uniq_id!: string;

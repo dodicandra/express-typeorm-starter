@@ -6,6 +6,7 @@ import {UserVoteMasterData} from '../entity';
 
 export class UserVoteMasterDataController {
   private repository = AppDataSource.getRepository(UserVoteMasterData);
+  static repository = AppDataSource.getRepository(UserVoteMasterData);
 
   async all(request: Request<any, any, any, UserVoteMasterData>, response: Response) {
     const queryWhere = Object.entries(request.query)
@@ -17,7 +18,7 @@ export class UserVoteMasterDataController {
       }, {});
 
     const where = request.query ? queryWhere : {};
-    const data = await this.repository.find({where});
+    const data = await this.repository.find({where: {...where, reservased: false}});
     return response.json({data});
   }
 

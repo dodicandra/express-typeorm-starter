@@ -24,6 +24,9 @@ class UserVoteMasterData extends DefaultEntity {
 
   @Column()
   rw!: string;
+
+  @Column({type: 'boolean', default: false, nullable: true})
+  reservased?: boolean;
 }
 
 export {UserVoteMasterData};
