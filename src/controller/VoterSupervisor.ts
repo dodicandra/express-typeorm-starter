@@ -55,7 +55,7 @@ export class VoterSupervisorController {
     return response.json({message: 'loggedin success', token});
   }
 
-  async getCandidate(request: Request<any, any, any>, response: Response) {
+  async getCandidateCount(request: Request<any, any, any>, response: Response) {
     const user = request.cookies.supervisor_token;
 
     const email = user?.split(':')[0] ?? '';
@@ -64,5 +64,25 @@ export class VoterSupervisorController {
     const count = data?.voter?.length ?? 0;
 
     return response.json({count});
+  }
+
+  async getCandidate(request: Request<any, any, any, {id: string; name: string}>, response: Response) {
+    const param = request.query;
+
+    try {
+      const data = await this.repository.findOne({
+        where: {name: Like(param.name), id: Number(param.id)},
+        relations: {voter: true},
+        select: {voter: true},
+      });
+
+      if (!data?.voter?.length) {
+        return response.json({data: []});
+      }
+      return response.json({data: data?.voter, count: data.voter.length});
+    } catch (error) {
+      const err = error as {message: string};
+      return response.status(500).json({message: err.message ?? ''});
+    }
   }
 }
