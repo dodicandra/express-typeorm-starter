@@ -12,5 +12,6 @@ declare module 'express' {
 
   interface Response {
     cookie(name: keyof Request['cookies'], val: any, options?: CookieOptions): this;
+    clearCookie(name: keyof Request['cookies'], options?: CookieOptions): this;
   }
 }
