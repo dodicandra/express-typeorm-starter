@@ -71,6 +71,9 @@ export class UserController {
   }
 
   async logout(request: Request, response: Response) {
-    return response.clearCookie('user_admin_token').clearCookie('supervisor_token').json({message: 'success'});
+    return response
+      .clearCookie('user_admin_token', cookieOptions)
+      .clearCookie('supervisor_token', cookieOptions)
+      .json({message: 'success'});
   }
 }
