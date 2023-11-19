@@ -1,5 +1,6 @@
 import {Request, Response} from 'express';
 
+import {cookieOptions} from '../contants/cookie';
 import {AppDataSource} from '../data-source';
 import {UserWitness} from '../entity/Witness';
 
@@ -67,8 +68,8 @@ export class UserWitnessController {
       return response.status(400).json({message: 'user not registered'});
     }
 
-    response.cookie('user_witness_email', user.email, {httpOnly: true, secure: true, sameSite: 'none'});
-    response.cookie('user_witness_id', user.id, {httpOnly: true, secure: true, sameSite: 'none'});
+    response.cookie('user_witness_email', user.email, cookieOptions);
+    response.cookie('user_witness_id', user.id, cookieOptions);
     return response.json({message: 'loggedin success'});
   }
 }

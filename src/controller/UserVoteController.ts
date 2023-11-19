@@ -8,6 +8,7 @@ import {VoterSupervisorController} from './VoterSupervisor';
 
 export class UserVoteController {
   private repository = AppDataSource.getRepository(UserVote);
+  static repository = AppDataSource.getRepository(UserVote);
 
   async all(request: Request<any, any, any, UserVote>, response: Response) {
     const query = request.query;

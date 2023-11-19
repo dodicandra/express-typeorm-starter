@@ -1,8 +1,10 @@
 import {Request, Response} from 'express';
 import {Like} from 'typeorm';
 
+import {cookieOptions} from '../contants/cookie';
 import {AppDataSource} from '../data-source';
 import {VoterSuperVisor} from '../entity';
+import {UserVoteController} from './UserVoteController';
 
 interface Payload {
   name: string;
@@ -16,7 +18,7 @@ export class VoterSupervisorController {
 
   async all(request: Request<any, any, any, {name: string}>, response: Response) {
     const data = await this.repository.find({
-      select: {email: true, id: true, name: true, voter: true},
+      select: {email: true, id: true, name: true, voter: true, password: true},
       relations: {voter: true},
       where: request.query.name ? {name: Like(request.query.name)} : undefined,
     });
@@ -47,11 +49,7 @@ export class VoterSupervisorController {
     }
     const token = `${user.email}:${user.password}:${user.name}`;
 
-    response.cookie('supervisor_token', token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-    });
+    response.cookie('supervisor_token', token, cookieOptions);
     return response.json({message: 'loggedin success', token});
   }
 
@@ -83,6 +81,41 @@ export class VoterSupervisorController {
     } catch (error) {
       const err = error as {message: string};
       return response.status(500).json({message: err.message ?? ''});
+    }
+  }
+
+  async delete(request: Request<any, any, {id: number}>, response: Response) {
+    const body = request.body;
+    try {
+      await UserVoteController.repository.delete({supervisor: {id: body.id}});
+      await this.repository.delete({id: body.id});
+      return response.json({message: 'success'});
+    } catch (error) {
+      const message = (error as {message: string}).message;
+      return response.status(500).json({message});
+    }
+  }
+
+  async edit(request: Request<any, any, VoterSuperVisor>, response: Response) {
+    const body = request.body;
+    try {
+      const data = await this.repository.update({id: body.id}, body);
+      return response.json({data});
+    } catch (error) {
+      console.log('🚀 ~ file: VoterSupervisor.ts:106 ~ VoterSupervisorController ~ edit ~ error:', error);
+      const message = (error as {message: string}).message;
+      return response.status(500).json({message});
+    }
+  }
+
+  async deleteVoter(request: Request<any, any, {id: number}>, response: Response) {
+    const body = request.body;
+    try {
+      const data = await UserVoteController.repository.delete({id: body.id});
+      return response.json({message: 'success', data});
+    } catch (error) {
+      const message = (error as {message: string}).message;
+      return response.status(500).json({message});
     }
   }
 }

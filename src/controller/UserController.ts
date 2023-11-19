@@ -1,6 +1,7 @@
 import {Request, Response} from 'express';
 import {Equal} from 'typeorm';
 
+import {cookieOptions} from '../contants/cookie';
 import {AppDataSource} from '../data-source';
 import {User} from '../entity/User';
 
@@ -65,11 +66,11 @@ export class UserController {
     }
 
     return response
-      .cookie('user_admin_token', `${user.name}:${user.password}:${user.role}`, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-      })
+      .cookie('user_admin_token', `${user.name}:${user.password}:${user.role}`, cookieOptions)
       .json({message: 'loggedin success', token: `${user.name}:${user.password}:${user.role}`});
+  }
+
+  async logout(request: Request, response: Response) {
+    return response.clearCookie('user_admin_token').clearCookie('supervisor_token').json({message: 'success'});
   }
 }

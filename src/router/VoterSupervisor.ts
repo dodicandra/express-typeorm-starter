@@ -37,4 +37,25 @@ export const voterSupervisorVoteRoute = createRoutes([
     action: 'getCandidate',
     middleWare: [authMiddlewareUserAdmin],
   },
+  {
+    controller: VoterSupervisorController,
+    method: 'delete',
+    route: '/supervisor',
+    action: 'delete',
+    middleWare: [authMiddlewareUserAdmin],
+  },
+  {
+    controller: VoterSupervisorController,
+    method: 'put',
+    route: '/supervisor',
+    action: 'edit',
+    middleWare: [authMiddlewareUserAdmin],
+  },
+  {
+    controller: VoterSupervisorController,
+    method: 'delete',
+    route: '/supervisor/voter',
+    action: 'deleteVoter',
+    middleWare: [authMiddlewareUserAdmin],
+  },
 ]);

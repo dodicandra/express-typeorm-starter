@@ -34,4 +34,10 @@ export const userRoute = createRoutes([
     action: 'remove',
     middleWare: [authMiddlewareUserAdmin],
   },
+  {
+    controller: UserController,
+    method: 'post',
+    route: '/logout',
+    action: 'logout',
+  },
 ]);
