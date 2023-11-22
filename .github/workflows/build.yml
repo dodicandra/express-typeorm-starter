@@ -15,7 +15,6 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: 22
           debug: true
-          allenvs: true
           script: |
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
