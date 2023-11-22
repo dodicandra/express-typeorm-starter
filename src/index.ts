@@ -19,7 +19,15 @@ const whitelist = [
 ];
 
 const corsOptions: cors.CorsOptions = {
-  origin: whitelist,
+  origin: (origin = '', callback) => {
+    console.log('visited :', origin);
+    const check = whitelist.indexOf(origin);
+    if (check !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error(''));
+    }
+  },
   credentials: true,
 };
 
