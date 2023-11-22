@@ -17,8 +17,10 @@ jobs:
           debug: true
           allenvs: true
           script: |
+            source ~/.profile
             cd /home/project/caleg-rika
-            whoami
+            whereis node
+            whereis npm
             npm ls -g --depth=0
             pwd
             git status
