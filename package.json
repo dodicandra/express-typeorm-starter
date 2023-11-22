@@ -43,6 +43,7 @@
     "start": "ts-node src/index.ts",
     "start:dev": "nodemon src/index.ts",
     "typeorm": "typeorm-ts-node-commonjs",
-    "pretty": "prettier  '**/*.{js,ts,tsx}' -w"
+    "pretty": "prettier  '**/*.{js,ts,tsx}' -w",
+    "build": "yarn tsc"
   }
 }
