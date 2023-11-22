@@ -25,7 +25,7 @@ const corsOptions: cors.CorsOptions = {
     if (check !== -1) {
       callback(null, true);
     } else {
-      callback(new Error(''));
+      callback(null);
     }
   },
   credentials: true,
