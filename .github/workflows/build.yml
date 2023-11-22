@@ -13,8 +13,10 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
+          port: 22
           script: |
             cd /home/project/caleg-rika
+            whoami
             pwd
             git status
             git fetch
