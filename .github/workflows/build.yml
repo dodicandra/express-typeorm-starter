@@ -1,0 +1,21 @@
+name: Build Server
+on:
+  push:
+    branches: development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy with SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd /home/project/caleg-rika
+            git fetch
+            git pull --rebase
+            tsc
+            pm2 restart ecosystem.config.js
