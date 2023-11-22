@@ -14,13 +14,16 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: 22
+          debug: true
+          allenvs: true
           script: |
             cd /home/project/caleg-rika
             whoami
+            npm ls -g --depth=0
             pwd
             git status
-            git fetch
-            git pull --rebase
-            yarn install
+            git fetch origin
+            git pull origin development --rebase
+            yarn
             yarn build
             pm2 restart ecosystem.config.js
