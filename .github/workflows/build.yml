@@ -17,7 +17,9 @@ jobs:
           debug: true
           allenvs: true
           script: |
-            source ~/.profile
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            npm --help
             cd /home/project/caleg-rika
             whereis node
             whereis npm
