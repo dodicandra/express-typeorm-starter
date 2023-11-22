@@ -18,16 +18,8 @@ const whitelist = [
   'https://*.rikahanom.com',
 ];
 
-const corsOptions = {
-  origin: (origin: any, callback: any) => {
-    console.log('visited :', origin);
-    const check = whitelist.indexOf(origin);
-    if (check !== -1) {
-      callback(null, true);
-    } else {
-      callback(null, null);
-    }
-  },
+const corsOptions: cors.CorsOptions = {
+  origin: whitelist,
   credentials: true,
 };
 
