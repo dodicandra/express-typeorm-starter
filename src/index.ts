@@ -15,6 +15,7 @@ const whitelist = [
   'http://localhost:4000',
   'https://rikahanom.com',
   'https://www.rikahanom.com',
+  'https://*.rikahanom.com',
 ];
 
 const corsOptions = {

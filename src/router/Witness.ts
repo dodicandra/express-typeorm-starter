@@ -13,6 +13,13 @@ export const UserWitnessRoute = createRoutes([
   {
     controller: UserWitnessController,
     method: 'get',
+    route: '/users-witness/count',
+    action: 'count',
+    middleWare: [authMiddlewareUserAdmin],
+  },
+  {
+    controller: UserWitnessController,
+    method: 'get',
     route: '/users-witness/:id',
     action: 'one',
   },

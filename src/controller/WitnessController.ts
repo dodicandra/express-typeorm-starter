@@ -14,6 +14,11 @@ export class UserWitnessController {
     return response.json(data);
   }
 
+  async count(request: Request, response: Response) {
+    const data = await this.repository.count();
+    return response.json({data});
+  }
+
   async one(request: Request<{id: string}>, response: Response) {
     const id = parseInt(request.params.id);
     try {

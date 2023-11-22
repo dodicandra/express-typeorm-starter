@@ -5,6 +5,7 @@ import {cookieOptions} from '../contants/cookie';
 import {AppDataSource} from '../data-source';
 import {VoterSuperVisor} from '../entity';
 import {UserVoteController} from './UserVoteController';
+import {UserVoteMasterDataController} from './UserVoteMasterDataController';
 
 interface Payload {
   name: string;
@@ -112,6 +113,7 @@ export class VoterSupervisorController {
     const body = request.body;
     try {
       const data = await UserVoteController.repository.delete({id: body.id});
+      await UserVoteMasterDataController.repository.update({id: body.id}, {reservased: false});
       return response.json({message: 'success', data});
     } catch (error) {
       const message = (error as {message: string}).message;

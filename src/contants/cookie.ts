@@ -1,7 +1,7 @@
 import {CookieOptions} from 'express';
 
 export const cookieOptions: CookieOptions = {
-  domain: 'rikahanom.com',
+  domain: process.env.ENV === 'development' ? 'localhost' : 'rikahanom.com',
   httpOnly: true,
   secure: true,
   sameSite: 'none',

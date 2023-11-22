@@ -32,7 +32,7 @@ class UserVote extends DefaultEntity {
 
   @ManyToOne(() => VoterSuperVisor, (v) => v.voter)
   @JoinColumn()
-  supervisor?: VoterSuperVisor;
+  supervisor?: VoterSuperVisor | null;
 }
 
 export {UserVote};
