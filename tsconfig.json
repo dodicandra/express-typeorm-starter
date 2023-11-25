@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["es5", "es6"],
+    "lib": ["es5", "es6", "DOM", "ES2017"],
     "target": "ES6",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -10,6 +10,8 @@
     "sourceMap": true,
     "forceConsistentCasingInFileNames": false,
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "strictFunctionTypes": false,
+    "skipLibCheck": true
   }
 }

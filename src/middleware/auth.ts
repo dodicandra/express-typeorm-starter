@@ -11,15 +11,24 @@ export async function authMiddlewareUserWitness(req: Request, res: Response, nex
   const {cookies} = req;
   const userCookie = cookies;
   console.log({witness: userCookie});
-  if (!userCookie.user_witness_email || !userCookie.user_witness_id) {
-    return res.status(401).json({message: 'Unauthorize'});
-  }
 
+  if (!userCookie.user_witness_token) {
+    return res.status(401).json({message: 'Witness Unauthorize'});
+  }
+  const token = userCookie.user_witness_token.split(':');
+  const email = token[0];
+  const name = token[1];
+  const id = Number(token[2]);
   const userWitnessRepo = AppDataSource.getRepository(UserWitness);
 
-  const user = await userWitnessRepo.findOne({where: {email: Equal(userCookie.user_witness_email)}});
+  const user = await userWitnessRepo.findOne({where: {email: Equal(email)}});
 
   if (user) {
+    req.app.locals.user_witness_token = {
+      email,
+      id,
+      name,
+    };
     next();
   } else {
     res.status(401).json({message: 'Unauthorize'});
@@ -58,6 +67,10 @@ export async function authMiddlewareSupervisor(req: Request, res: Response, next
   const user = await userAdmin.findOne({where: {email: Equal(email), password: Equal(password)}});
 
   if (user) {
+    req.app.locals.supervisor_token = {
+      email,
+      password,
+    };
     next();
   } else {
     res.status(401).json({message: 'SuperVisor Unauthorize'});

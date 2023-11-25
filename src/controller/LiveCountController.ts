@@ -12,6 +12,7 @@ interface LiveCountSave {
   caleg: string;
   count: number;
   tps: string;
+  kelurahan: string;
 }
 
 interface LiveCountEdit {
@@ -51,12 +52,12 @@ export class LiveCountController {
   }
 
   async save(request: Request<any, any, LiveCountSave>, response: Response) {
-    const {caleg, count, tps} = request.body;
-    const loggedUser = request.cookies;
+    const {caleg, count, tps, kelurahan} = request.body;
+    const userEmail = request.app.locals.user_witness_token.email ?? '';
     const files = request?.files as Express.Multer.File[];
 
     const userWitness = await UserWitnessController.repository.findOne({
-      where: {email: Equal(loggedUser.user_witness_email ?? '')},
+      where: {email: Equal(userEmail)},
     });
 
     if (!userWitness) {
@@ -69,6 +70,9 @@ export class LiveCountController {
     const p2 = new Photo();
     p2.path = files[1].filename;
     p2.userWitenss = userWitness;
+    const p3 = new Photo();
+    p3.path = files[2].filename;
+    p3.userWitenss = userWitness;
 
     const calegs = await CalegController.repository.findOne({where: {name: Equal(caleg)}});
 
@@ -79,13 +83,15 @@ export class LiveCountController {
     const votes = new LiveCount();
     votes.count = count;
     votes.userWitness = userWitness;
-    votes.userWitnessPhoto = [p1, p2];
+    votes.userWitnessPhoto = [p1, p2, p3];
     votes.caleg = calegs;
     votes.tps = tps;
+    votes.kelurahan = kelurahan;
 
     try {
       await AppDataSource.manager.save(p1);
       await AppDataSource.manager.save(p2);
+      await AppDataSource.manager.save(p3);
       const res = await this.repository.save(votes);
 
       return response.json({message: 'user saved', data: res});
@@ -153,5 +159,18 @@ export class LiveCountController {
     }, 0);
 
     return response.json({data: {count, data: countData}});
+  }
+
+  async getTotalVotes(request: Request, response: Response) {
+    try {
+      const query = 'SUM("caleg_count")';
+
+      const count = await this.repository.createQueryBuilder().select(query, 'votes').getRawOne();
+
+      return response.json({data: count});
+    } catch (error) {
+      const message = (error as any).message;
+      return response.status(500).json({message});
+    }
   }
 }
