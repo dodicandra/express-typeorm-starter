@@ -72,7 +72,7 @@ export class UserWitnessController {
     if (!user) {
       return response.status(400).json({message: 'user not registered'});
     }
-    const token = `${user.email}:${user.id}`;
+    const token = `${user.email}:${user.name}:${user.id}`;
     response.cookie('user_witness_token', token, cookieOptions);
     return response.json({message: 'loggedin success'});
   }

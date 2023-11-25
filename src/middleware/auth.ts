@@ -17,7 +17,8 @@ export async function authMiddlewareUserWitness(req: Request, res: Response, nex
   }
   const token = userCookie.user_witness_token.split(':');
   const email = token[0];
-  const id = Number(token[1]);
+  const name = token[1];
+  const id = Number(token[2]);
   const userWitnessRepo = AppDataSource.getRepository(UserWitness);
 
   const user = await userWitnessRepo.findOne({where: {email: Equal(email)}});
@@ -26,6 +27,7 @@ export async function authMiddlewareUserWitness(req: Request, res: Response, nex
     req.app.locals.user_witness_token = {
       email,
       id,
+      name,
     };
     next();
   } else {

@@ -1,5 +1,5 @@
 import {LiveCountController} from '../controller/LiveCountController';
-import {authMiddlewareUserWitness} from '../middleware/auth';
+import {authMiddlewareUserAdmin, authMiddlewareUserWitness} from '../middleware/auth';
 import {upload} from '../storage/multer';
 import {createRoutes} from '../utils/createRoute';
 
@@ -9,6 +9,13 @@ export const LiveCountRoute = createRoutes([
     method: 'get',
     route: '/live',
     action: 'all',
+  },
+  {
+    controller: LiveCountController,
+    method: 'get',
+    route: '/live/count',
+    action: 'getTotalVotes',
+    middleWare: [authMiddlewareUserAdmin],
   },
   {
     controller: LiveCountController,

@@ -11,6 +11,7 @@ import {Routes} from './routes';
 config();
 
 const whitelist = [
+  'http://192.168.1.4:3000',
   'http://localhost:3000',
   'http://localhost:4000',
   'https://rikahanom.com',

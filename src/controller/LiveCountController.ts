@@ -70,6 +70,9 @@ export class LiveCountController {
     const p2 = new Photo();
     p2.path = files[1].filename;
     p2.userWitenss = userWitness;
+    const p3 = new Photo();
+    p3.path = files[2].filename;
+    p3.userWitenss = userWitness;
 
     const calegs = await CalegController.repository.findOne({where: {name: Equal(caleg)}});
 
@@ -80,7 +83,7 @@ export class LiveCountController {
     const votes = new LiveCount();
     votes.count = count;
     votes.userWitness = userWitness;
-    votes.userWitnessPhoto = [p1, p2];
+    votes.userWitnessPhoto = [p1, p2, p3];
     votes.caleg = calegs;
     votes.tps = tps;
     votes.kelurahan = kelurahan;
@@ -88,6 +91,7 @@ export class LiveCountController {
     try {
       await AppDataSource.manager.save(p1);
       await AppDataSource.manager.save(p2);
+      await AppDataSource.manager.save(p3);
       const res = await this.repository.save(votes);
 
       return response.json({message: 'user saved', data: res});
@@ -155,5 +159,18 @@ export class LiveCountController {
     }, 0);
 
     return response.json({data: {count, data: countData}});
+  }
+
+  async getTotalVotes(request: Request, response: Response) {
+    try {
+      const query = 'SUM("caleg_count")';
+
+      const count = await this.repository.createQueryBuilder().select(query, 'votes').getRawOne();
+
+      return response.json({data: count});
+    } catch (error) {
+      const message = (error as any).message;
+      return response.status(500).json({message});
+    }
   }
 }
