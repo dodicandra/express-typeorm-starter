@@ -12,6 +12,7 @@ interface LiveCountSave {
   caleg: string;
   count: number;
   tps: string;
+  kelurahan: string;
 }
 
 interface LiveCountEdit {
@@ -51,12 +52,12 @@ export class LiveCountController {
   }
 
   async save(request: Request<any, any, LiveCountSave>, response: Response) {
-    const {caleg, count, tps} = request.body;
-    const loggedUser = request.cookies;
+    const {caleg, count, tps, kelurahan} = request.body;
+    const userEmail = request.app.locals.user_witness_token.email ?? '';
     const files = request?.files as Express.Multer.File[];
 
     const userWitness = await UserWitnessController.repository.findOne({
-      where: {email: Equal(loggedUser.user_witness_email ?? '')},
+      where: {email: Equal(userEmail)},
     });
 
     if (!userWitness) {
@@ -82,6 +83,7 @@ export class LiveCountController {
     votes.userWitnessPhoto = [p1, p2];
     votes.caleg = calegs;
     votes.tps = tps;
+    votes.kelurahan = kelurahan;
 
     try {
       await AppDataSource.manager.save(p1);

@@ -1,5 +1,5 @@
 import {UserWitnessController} from '../controller/WitnessController';
-import {authMiddlewareUserAdmin, authMiddlewareUserWitness} from '../middleware/auth';
+import {authMiddlewareUserAdmin} from '../middleware/auth';
 import {createRoutes} from '../utils/createRoute';
 
 export const UserWitnessRoute = createRoutes([
@@ -7,7 +7,7 @@ export const UserWitnessRoute = createRoutes([
     controller: UserWitnessController,
     method: 'get',
     route: '/users-witness',
-    middleWare: [authMiddlewareUserWitness],
+    middleWare: [authMiddlewareUserAdmin],
     action: 'all',
   },
   {

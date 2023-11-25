@@ -47,9 +47,9 @@ export class UserVoteController {
 
   async save(request: Request<any, any, UserVote>, response: Response) {
     const body = request.body;
-    const token = request.cookies.supervisor_token;
-    const spEmail = token?.split(':')[0] ?? '';
-    const spPass = token?.split(':')[1] ?? '';
+    const token = request.app.locals.supervisor_token;
+    const spEmail = token.email;
+    const spPass = token.password;
 
     const supervisor = await VoterSupervisorController.repository.findOne({
       where: {email: Equal(spEmail), password: Equal(spPass)},

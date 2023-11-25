@@ -24,6 +24,9 @@ class LiveCount extends DefaultEntity {
 
   @Column({nullable: true})
   tps?: string;
+
+  @Column({nullable: true})
+  kelurahan?: string;
 }
 
 export {LiveCount};

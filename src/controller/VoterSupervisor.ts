@@ -55,9 +55,9 @@ export class VoterSupervisorController {
   }
 
   async getCandidateCount(request: Request<any, any, any>, response: Response) {
-    const user = request.cookies.supervisor_token;
+    const user = request.app.locals.supervisor_token;
 
-    const email = user?.split(':')[0] ?? '';
+    const email = user?.email;
 
     const data = await this.repository.findOne({where: {email}, relations: {voter: true}});
     const count = data?.voter?.length ?? 0;
