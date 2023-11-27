@@ -1,4 +1,5 @@
 import {LiveCountController} from '../controller/LiveCountController';
+import {allowCount} from '../middleware/allow-counting';
 import {authMiddlewareUserAdmin, authMiddlewareUserWitness} from '../middleware/auth';
 import {upload} from '../storage/multer';
 import {createRoutes} from '../utils/createRoute';
@@ -28,7 +29,7 @@ export const LiveCountRoute = createRoutes([
     method: 'post',
     route: '/live',
     action: 'save',
-    middleWare: [authMiddlewareUserWitness, upload.array('images', 3)],
+    middleWare: [allowCount, authMiddlewareUserWitness, upload.array('images', 3)],
   },
   {
     controller: LiveCountController,
@@ -42,6 +43,6 @@ export const LiveCountRoute = createRoutes([
     method: 'put',
     route: '/live/:id',
     action: 'edit',
-    middleWare: [authMiddlewareUserWitness, upload.array('images', 2)],
+    middleWare: [allowCount, authMiddlewareUserWitness, upload.array('images', 3)],
   },
 ]);
