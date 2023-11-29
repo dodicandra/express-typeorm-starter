@@ -73,6 +73,9 @@ export class VoterSupervisorController {
         where: {name: Like(param.name), id: Number(param.id)},
         relations: {voter: true},
         select: {voter: true},
+        order: {
+          voter: {name: 'DESC'},
+        },
       });
 
       if (!data?.voter?.length) {
