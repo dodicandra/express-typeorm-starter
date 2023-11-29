@@ -74,7 +74,7 @@ export class VoterSupervisorController {
         relations: {voter: true},
         select: {voter: true},
         order: {
-          voter: {name: 'DESC'},
+          voter: {name: 'ASC'},
         },
       });
 
