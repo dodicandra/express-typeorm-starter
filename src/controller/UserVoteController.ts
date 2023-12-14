@@ -21,8 +21,8 @@ export class UserVoteController {
             return Object.assign(acc, curr);
           }, {})
       : {};
-    console.log(where);
-    const data = await this.repository.find({where});
+
+    const data = await this.repository.find({where, relations: {supervisor: true}});
     const count = await this.repository.count({where});
     return response.json({data, count});
   }
