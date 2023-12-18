@@ -71,4 +71,9 @@ export class UserVoteMasterDataController {
 
     return response.json({message: 'user has been removed'});
   }
+
+  async allAsAdmin(request: Request<any, any, any, any>, response: Response) {
+    const data = await this.repository.find();
+    return response.json({data});
+  }
 }

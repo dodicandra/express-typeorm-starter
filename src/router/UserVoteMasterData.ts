@@ -1,4 +1,5 @@
 import {UserVoteMasterDataController} from '../controller/UserVoteMasterDataController';
+import {authMiddlewareUserAdmin} from '../middleware/auth';
 import {createRoutes} from '../utils/createRoute';
 
 export const UserVoteMasterRoute = createRoutes([
@@ -7,6 +8,13 @@ export const UserVoteMasterRoute = createRoutes([
     method: 'get',
     route: '/user-vote-master',
     action: 'all',
+  },
+  {
+    controller: UserVoteMasterDataController,
+    method: 'get',
+    route: '/user-vote-masters',
+    action: 'allAsAdmin',
+    middleWare: [authMiddlewareUserAdmin],
   },
   {
     controller: UserVoteMasterDataController,
