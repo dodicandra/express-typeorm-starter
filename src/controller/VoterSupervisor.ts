@@ -88,6 +88,29 @@ export class VoterSupervisorController {
     }
   }
 
+  async getCandidateMy(request: Request<any, any, any>, response: Response) {
+    const param = request.app.locals.supervisor_token;
+
+    try {
+      const data = await this.repository.findOne({
+        where: {email: param.email, name: param.name},
+        relations: {voter: true},
+        select: {voter: true},
+        order: {
+          voter: {name: 'ASC'},
+        },
+      });
+
+      if (!data?.voter?.length) {
+        return response.json({data: []});
+      }
+      return response.json({data: data?.voter, count: data.voter.length});
+    } catch (error) {
+      const err = error as {message: string};
+      return response.status(500).json({message: err.message ?? ''});
+    }
+  }
+
   async delete(request: Request<any, any, {id: number}>, response: Response) {
     const body = request.body;
     try {

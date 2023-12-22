@@ -63,6 +63,7 @@ export async function authMiddlewareSupervisor(req: Request, res: Response, next
 
   const email = token[0];
   const password = token[1];
+  const name = token[2];
   console.log({supervisor: userCookie});
   const user = await userAdmin.findOne({where: {email: Equal(email), password: Equal(password)}});
 
@@ -70,6 +71,7 @@ export async function authMiddlewareSupervisor(req: Request, res: Response, next
     req.app.locals.supervisor_token = {
       email,
       password,
+      name,
     };
     next();
   } else {
