@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
 import {Equal} from 'typeorm';
 
-import {cookieOptions} from '../contants/cookie';
+import {cookieOptions} from '../constants/cookie';
 import {AppDataSource} from '../data-source';
 import {User} from '../entity/User';
 

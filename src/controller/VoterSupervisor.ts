@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
 import {Like} from 'typeorm';
 
-import {cookieOptions} from '../contants/cookie';
+import {cookieOptions} from '../constants/cookie';
 import {AppDataSource} from '../data-source';
 import {VoterSuperVisor} from '../entity';
 import {UserVoteController} from './UserVoteController';

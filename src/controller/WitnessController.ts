@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 
-import {cookieOptions} from '../contants/cookie';
+import {cookieOptions} from '../constants/cookie';
 import {AppDataSource} from '../data-source';
 import {UserWitness} from '../entity/Witness';
 
