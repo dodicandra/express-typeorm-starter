@@ -29,7 +29,11 @@ export const LiveCountRoute = createRoutes([
     method: 'post',
     route: '/live',
     action: 'save',
-    middleWare: [allowCount, authMiddlewareUserWitness, upload.array('images', 3)],
+    middleWare: [
+      allowCount,
+      authMiddlewareUserWitness,
+      upload.fields([{name: 'caleg_teli'}, {name: 'total_caleg_teli'}, {name: 'total_teli'}, {name: 'ri_teli'}]),
+    ],
   },
   {
     controller: LiveCountController,

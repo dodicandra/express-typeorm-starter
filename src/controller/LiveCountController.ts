@@ -22,6 +22,14 @@ interface LiveCountEdit {
   witnessEmail: number;
 }
 
+interface UploadImageData {
+  caleg_teli: Express.Multer.File[];
+  total_caleg_teli: Express.Multer.File[];
+  total_teli: Express.Multer.File[];
+  ri_teli: Express.Multer.File[];
+  [key: string]: Express.Multer.File[];
+}
+
 export class LiveCountController {
   private repository = AppDataSource.getRepository(LiveCount);
 
@@ -54,8 +62,7 @@ export class LiveCountController {
   async save(request: Request<any, any, LiveCountSave>, response: Response) {
     const {caleg, count, tps, kelurahan} = request.body;
     const userEmail = request.app.locals.user_witness_token.email ?? '';
-    const files = request?.files as Express.Multer.File[];
-
+    const files = request?.files as unknown as UploadImageData;
     const userWitness = await UserWitnessController.repository.findOne({
       where: {email: Equal(userEmail)},
     });
@@ -64,15 +71,15 @@ export class LiveCountController {
       return response.status(500).json({message: 'user saksi tidak ada'});
     }
 
-    const p1 = new Photo();
-    p1.path = files[0].filename;
-    p1.userWitenss = userWitness;
-    const p2 = new Photo();
-    p2.path = files[1].filename;
-    p2.userWitenss = userWitness;
-    const p3 = new Photo();
-    p3.path = files[2].filename;
-    p3.userWitenss = userWitness;
+    const arrayPhoto: Photo[] = [];
+
+    for (const [key, value] of Object.entries(files)) {
+      const p = new Photo();
+      p.filed = key;
+      p.path = value[0].filename;
+      p.userWitenss = userWitness;
+      arrayPhoto.push(p);
+    }
 
     const calegs = await CalegController.repository.findOne({where: {name: Equal(caleg)}});
 
@@ -83,15 +90,16 @@ export class LiveCountController {
     const votes = new LiveCount();
     votes.count = count;
     votes.userWitness = userWitness;
-    votes.userWitnessPhoto = [p1, p2, p3];
+    votes.userWitnessPhoto = arrayPhoto;
     votes.caleg = calegs;
     votes.tps = tps;
     votes.kelurahan = kelurahan;
 
     try {
-      await AppDataSource.manager.save(p1);
-      await AppDataSource.manager.save(p2);
-      await AppDataSource.manager.save(p3);
+      for (const iterator of arrayPhoto) {
+        await AppDataSource.manager.save(iterator);
+      }
+      console.log(votes);
       const res = await this.repository.save(votes);
 
       return response.json({message: 'user saved', data: res});
@@ -103,7 +111,7 @@ export class LiveCountController {
   async edit(request: Request<{id: string}, any, LiveCountEdit>, response: Response) {
     const id = Number(request.params.id);
     const body = request.body;
-    const images = request.files as Express.Multer.File[];
+    const images = request.files as unknown as UploadImageData;
     const data = await this.repository.findOne({where: {id}, relations: {userWitnessPhoto: true}});
 
     if (!data) {
@@ -113,8 +121,8 @@ export class LiveCountController {
     data.count = body.count;
 
     if (data.userWitnessPhoto) {
-      data.userWitnessPhoto.map((it, index) => {
-        if (images.length) it.path = images[index].filename;
+      data.userWitnessPhoto.map((it) => {
+        if (Object.keys(images).length) it.path = images[it.filed][0].filename;
       });
     }
 

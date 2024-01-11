@@ -13,13 +13,13 @@ export async function allowCount(request: Request, response: Response, next: Nex
     return response.status(500).json({message: 'Penginputan suara belum bisa dilakukan'});
   }
 
-  if (Dayjs(date.date).isToday()) {
-    next();
-  } else {
+  if (Dayjs().isBefore(date.date)) {
     return response.status(500).json({
       message: `Penginputan suara belum bisa dilakukan, penginputan dimulai pada ${Dayjs(date.date).format(
         'DD-MM-YYYY',
       )}`,
     });
+  } else {
+    next();
   }
 }

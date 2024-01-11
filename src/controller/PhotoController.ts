@@ -31,9 +31,9 @@ export class PhotoController {
   }
 
   async save(request: Request<any, any, Photo>, response: Response) {
-    const {path} = request.body;
+    const {path, filed} = request.body;
 
-    const user = Object.assign<Photo, Photo>(new Photo(), {path});
+    const user = Object.assign<Photo, Photo>(new Photo(), {path, filed});
 
     const res = await this.repository.save(user);
 

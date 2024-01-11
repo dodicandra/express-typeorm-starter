@@ -8,6 +8,9 @@ import {UserWitness} from './Witness';
 @Entity({name: 'photo'})
 class Photo extends DefaultEntity {
   @Column()
+  filed!: string;
+
+  @Column()
   path!: string;
 
   @ManyToOne(() => LiveCount, (u) => u.userWitnessPhoto)
