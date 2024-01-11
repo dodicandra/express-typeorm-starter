@@ -99,7 +99,6 @@ export class LiveCountController {
       for (const iterator of arrayPhoto) {
         await AppDataSource.manager.save(iterator);
       }
-      console.log(votes);
       const res = await this.repository.save(votes);
 
       return response.json({message: 'user saved', data: res});

@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import {config} from 'dotenv';
 import express from 'express';
+import morgan from 'morgan';
 
 import {PORT} from './config';
 import {AppDataSource} from './data-source';
@@ -43,7 +44,16 @@ AppDataSource.initialize()
     app.use(bodyParser.text({limit: '500mb'}));
     app.use(bodyParser.urlencoded({extended: true, limit: '500mb'}));
     app.use('/uploads', express.static('uploads'));
-
+    app.use(
+      morgan(
+        ':remote-addr - :remote-user [:date[web]] ":method :url HTTP/:http-version" :status :res[content-length]',
+        {
+          skip: function (req, res) {
+            return res.statusCode < 400;
+          },
+        },
+      ),
+    );
     // register express routes from defined application routes
     Routes.forEach((route) => {
       app.use(route);
