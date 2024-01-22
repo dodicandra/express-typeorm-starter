@@ -2,6 +2,7 @@ import {
   areaRoute,
   calegRoute,
   configRoute,
+  downlaodRoute,
   LiveCountRoute,
   PhotoRoute,
   userRoute,
@@ -22,4 +23,5 @@ export const Routes = [
   UserVoteMasterRoute,
   voterSupervisorVoteRoute,
   configRoute,
+  downlaodRoute,
 ];
