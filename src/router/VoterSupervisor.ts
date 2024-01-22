@@ -1,4 +1,4 @@
-import {VoterSupervisorController} from '../controller/VoterSupervisor';
+import {VoterSupervisorController} from '../controller/VoterSupervisorController';
 import {authMiddlewareSupervisor, authMiddlewareUserAdmin} from '../middleware/auth';
 import {createRoutes} from '../utils/createRoute';
 

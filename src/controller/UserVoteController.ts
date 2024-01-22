@@ -4,7 +4,7 @@ import {Equal} from 'typeorm';
 import {AppDataSource} from '../data-source';
 import {UserVote} from '../entity/UserVote';
 import {UserVoteMasterDataController} from './UserVoteMasterDataController';
-import {VoterSupervisorController} from './VoterSupervisor';
+import {VoterSupervisorController} from './VoterSupervisorController';
 
 export class UserVoteController {
   private repository = AppDataSource.getRepository(UserVote);

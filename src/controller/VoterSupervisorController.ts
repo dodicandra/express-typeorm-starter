@@ -20,7 +20,7 @@ export class VoterSupervisorController {
   async all(request: Request<any, any, any, {name: string}>, response: Response) {
     const data = await this.repository.find({
       select: {email: true, id: true, name: true, voter: true, password: true},
-      relations: {voter: true},
+      relations: {voter: true, hasBlocked: true},
       where: request.query.name ? {name: Like(request.query.name)} : undefined,
     });
     return response.json({data});

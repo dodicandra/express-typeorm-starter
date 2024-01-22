@@ -8,3 +8,4 @@ export * from './Area';
 export * from './UserVoteMasterData';
 export * from './VoterSupervisor';
 export * from './Config';
+export * from './Block';

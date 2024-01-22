@@ -1,5 +1,6 @@
-import {Column, Entity, OneToMany} from 'typeorm';
+import {Column, Entity, JoinColumn, OneToMany, OneToOne} from 'typeorm';
 
+import {BlockUser} from './BlockUser';
 import {DefaultEntity} from './Entity';
 import {UserVote} from './UserVote';
 
@@ -16,5 +17,9 @@ class VoterSuperVisor extends DefaultEntity {
 
   @OneToMany(() => UserVote, (u) => u.supervisor)
   voter?: UserVote[];
+
+  @OneToOne(() => BlockUser, {cascade: true, onDelete: 'SET NULL'})
+  @JoinColumn()
+  hasBlocked?: BlockUser;
 }
 export {VoterSuperVisor};
