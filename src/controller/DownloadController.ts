@@ -32,7 +32,7 @@ export class DownloadController {
     };
 
     const htmlPDF = new PuppeteerHTMLPDF();
-    await htmlPDF.setOptions({format: 'A4'});
+    await htmlPDF.setOptions({format: 'A4', args: ['--no-sandbox']});
 
     const html = await htmlPDF.readFile(path.join(__dirname, '../../views/pdf.html'), 'utf8');
     const template = hbs.compile(html);
