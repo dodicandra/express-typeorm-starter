@@ -18,7 +18,7 @@ export class UserVoteMasterDataController {
       }, {});
 
     const where = request.query ? queryWhere : {};
-    const data = await this.repository.find({where: {...where, reservased: false}});
+    const data = await this.repository.find({where: {reservased: false, ...where}});
     return response.json({data});
   }
 
