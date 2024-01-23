@@ -59,6 +59,14 @@ export class UserVoteController {
       return response.status(500).json({message: 'supervisor tidak ada'});
     }
 
+    const voterMaster = await UserVoteMasterDataController.repository.findOne({
+      where: {kecamatan: body.kecamatan, kelurahan: body.kelurahan, tps: body.tps, name: body.name, id: body.id},
+    });
+
+    if (voterMaster) {
+      return response.status(400).json({message: `Calon ${voterMaster.name} sudah diinput!`});
+    }
+
     const user = Object.assign<UserVote, UserVote>(new UserVote(), {...body, supervisor});
     await UserVoteMasterDataController.repository.update({id: body.id}, {reservased: true});
     const res = await this.repository.save(user);
