@@ -63,7 +63,7 @@ export class UserVoteController {
       where: {kecamatan: body.kecamatan, kelurahan: body.kelurahan, tps: body.tps, name: body.name, id: body.id},
     });
 
-    if (voterMaster) {
+    if (voterMaster?.reservased) {
       return response.status(400).json({message: `Calon ${voterMaster.name} sudah diinput!`});
     }
 
