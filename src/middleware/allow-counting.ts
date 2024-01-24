@@ -16,7 +16,7 @@ export async function allowCount(request: Request, response: Response, next: Nex
   if (Dayjs().isBefore(date.date)) {
     return response.status(500).json({
       message: `Penginputan suara belum bisa dilakukan, penginputan dimulai pada ${Dayjs(date.date).format(
-        'DD-MM-YYYY',
+        'DD-MM-YYYY hh:mm:ss A',
       )}`,
     });
   } else {
