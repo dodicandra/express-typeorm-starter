@@ -43,4 +43,11 @@ export const UserWitnessRoute = createRoutes([
     action: 'remove',
     middleWare: [authMiddlewareUserAdmin],
   },
+  {
+    controller: UserWitnessController,
+    method: 'post',
+    route: '/users-witness/bulk',
+    action: 'bulkSave',
+    middleWare: [authMiddlewareUserAdmin],
+  },
 ]);
