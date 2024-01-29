@@ -1,5 +1,5 @@
 import {UserVoteController} from '../controller/UserVoteController';
-import {authMiddlewareSupervisor, authMiddlewareUserAdmin} from '../middleware/auth';
+import {authMiddlewareSupervisor, authMiddlewareSupervisorBlock, authMiddlewareUserAdmin} from '../middleware/auth';
 import {createRoutes} from '../utils/createRoute';
 
 export const UserVoteRoute = createRoutes([
@@ -21,7 +21,7 @@ export const UserVoteRoute = createRoutes([
     method: 'post',
     route: '/user-vote',
     action: 'save',
-    middleWare: [authMiddlewareSupervisor],
+    middleWare: [authMiddlewareSupervisor, authMiddlewareSupervisorBlock],
   },
   {
     controller: UserVoteController,

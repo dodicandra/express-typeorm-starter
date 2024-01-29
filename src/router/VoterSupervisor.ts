@@ -1,5 +1,5 @@
 import {VoterSupervisorController} from '../controller/VoterSupervisorController';
-import {authMiddlewareSupervisor, authMiddlewareUserAdmin} from '../middleware/auth';
+import {authMiddlewareSupervisor, authMiddlewareSupervisorBlock, authMiddlewareUserAdmin} from '../middleware/auth';
 import {createRoutes} from '../utils/createRoute';
 
 export const voterSupervisorVoteRoute = createRoutes([
@@ -35,7 +35,7 @@ export const voterSupervisorVoteRoute = createRoutes([
     method: 'get',
     route: '/supervisor/my',
     action: 'getCandidateMy',
-    middleWare: [authMiddlewareSupervisor],
+    middleWare: [authMiddlewareSupervisor, authMiddlewareSupervisorBlock],
   },
   {
     controller: VoterSupervisorController,

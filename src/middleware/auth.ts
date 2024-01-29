@@ -91,3 +91,21 @@ export function authJWT(req: Request, res: Response, next: Function) {
     return res.status(401).json({message: 'Kamu tidak punya akses'});
   }
 }
+
+export async function authMiddlewareSupervisorBlock(req: Request, res: Response, next: NextFunction) {
+  const superVisor = req.app.locals.supervisor_token;
+
+  const userAdmin = AppDataSource.getRepository(VoterSuperVisor);
+
+  const user = await userAdmin.findOne({
+    where: {email: Equal(superVisor.email), password: Equal(superVisor.password)},
+    relations: {hasBlocked: true},
+  });
+  console.log('🚀 ~ authMiddlewareSupervisorBlock ~ user:', user);
+
+  if (user?.hasBlocked) {
+    res.status(401).json({message: 'You not have permission'});
+  } else {
+    next();
+  }
+}
