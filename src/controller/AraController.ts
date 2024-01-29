@@ -81,7 +81,11 @@ export class AreaController {
       }, {});
 
     const where = request.query ? queryWhere : {};
-    const data = await this.repository.tps.find({where, select: {id: true, number: true, kelurahan: true}});
+    const data = await this.repository.tps.find({
+      where,
+      order: {kelurahan: 'ASC'},
+      select: {id: true, number: true, kelurahan: true},
+    });
     return response.json({data});
   }
 

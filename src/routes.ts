@@ -3,6 +3,7 @@ import {
   BlockRoute,
   calegRoute,
   configRoute,
+  downlaodRoute,
   LiveCountRoute,
   PhotoRoute,
   userRoute,
@@ -24,4 +25,5 @@ export const Routes = [
   voterSupervisorVoteRoute,
   configRoute,
   BlockRoute,
+  downlaodRoute,
 ];

@@ -76,4 +76,14 @@ export class UserWitnessController {
     response.cookie('user_witness_token', token, cookieOptions);
     return response.json({message: 'loggedin success'});
   }
+
+  async bulkSave(request: Request<any, any, {name: string; email: string}[]>, response: Response) {
+    const body = request.body;
+    try {
+      const res = await this.repository.save(body);
+      return response.json({message: 'bulk user saved', data: res});
+    } catch (error) {
+      return response.status(500).json({message: (error as any).message});
+    }
+  }
 }
